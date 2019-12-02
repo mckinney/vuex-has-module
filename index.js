@@ -4,26 +4,25 @@
  * @return {Boolean}
 */
 
-export default (store) => {
-	// eslint-disable-next-line no-param-reassign
-	store.hasModule = function hasModule(modulePath) {
-		let moduleExists = false;
-
-		if (modulePath) {
-			if (!Array.isArray(modulePath)) {
-				// eslint-disable-next-line no-param-reassign
-				modulePath = modulePath.split("/");
-			}
-
-			// eslint-disable-next-line no-underscore-dangle
-			let m = this._modules.root;
-			moduleExists = modulePath.every((p) => {
-				// eslint-disable-next-line no-underscore-dangle
-				m = m._children[p];
-				return m;
-			});
+function installer(store) {
+	return (modulePath) => {
+		if (!modulePath) {
+			throw new Error("vuex-has-module expects a path argument.");
 		}
 
-		return moduleExists;
-	};
+		let storeModule = store._modules.root;
+		const path = !Array.isArray(path) ? path.split("/") : modulePath;
+
+		return modulePath.every((path) => {
+			storeModule = storeModule._children[path];
+			return storeModule;
+		});
+	}
+}
+
+export default (store) => {
+	const hasModule = installer(store);
+	store.hasModule = hasModule;
 };
+
+export { installer };
