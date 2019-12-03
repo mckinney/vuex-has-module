@@ -11,7 +11,7 @@ function installer(store) {
 		}
 
 		let storeModule = store._modules.root;
-		const path = !Array.isArray(path) ? path.split("/") : modulePath;
+		modulePath = !Array.isArray(modulePath) ? modulePath.split("/") : modulePath;
 
 		return modulePath.every((path) => {
 			storeModule = storeModule._children[path];
